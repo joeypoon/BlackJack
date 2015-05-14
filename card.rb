@@ -40,10 +40,10 @@ class Card
     end
 
     def set_card card
-      @card = card if %w(Ace Two Three Four Five Six Seven Eight Nine Ten Jack Queen King).include?(card)
+      @card = card.to_sym if %w(Ace Two Three Four Five Six Seven Eight Nine Ten Jack Queen King).include?(card)
     end
 
     def set_suit suit
-      @suit = suit.capitalize.to_sym if %w(Spade Heart Club Diamond).include?(suit)
+      @suit = suit.to_sym if %w(Spade Heart Club Diamond).include?(suit)
     end
 end
