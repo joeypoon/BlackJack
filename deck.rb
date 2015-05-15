@@ -1,11 +1,19 @@
-require './card'
+require '~/dropbox/workspace/iron_yard/week-2-lab/card'
 
 class Deck
-  attr_accessor :cards
+  attr_reader :cards
 
   def initialize
     @cards = []
     create_deck
+  end
+
+  def shuffle_deck
+    @cards.shuffle!
+  end
+
+  def draw
+    @cards.shift
   end
 
   private

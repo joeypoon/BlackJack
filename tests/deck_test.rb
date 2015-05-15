@@ -1,5 +1,5 @@
 require 'minitest/autorun'
-require './deck'
+require '~/dropbox/workspace/iron_yard/week-2-lab/deck'
 
 class DeckTest < Minitest::Test
   def setup
@@ -18,5 +18,18 @@ class DeckTest < Minitest::Test
   def test_13__spades
     spades = @deck.cards.select { |card| card.suit == :Spade }
     assert_equal 13, spades.count
+  end
+
+  def test_shuffle
+    deck = Deck.new
+    original = deck.cards.dup
+    shuffle = deck.shuffle_deck
+    assert_equal false, original == shuffle
+  end
+
+  def test_draw
+    deck = Deck.new
+    card = deck.draw
+    assert_equal false, deck.cards.include?(card)
   end
 end

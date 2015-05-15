@@ -6,17 +6,17 @@ class Card
     set_suit(suit.capitalize)
     set_card(card.capitalize)
   end
-
-  def show_card
-    "#{@card} of #{@suit}s"
-  end
-
+  
   def soft_ace
     @value = 1
   end
 
   def hard_ace
     @value = 11
+  end
+
+  def to_s
+    "#{@card} of #{@suit}s"
   end
 
   private
