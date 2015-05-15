@@ -1,5 +1,5 @@
 require 'minitest/autorun'
-require '~/dropbox/workspace/iron_yard/week-2-lab/blackjack'
+require_relative '../blackjack'
 
 class BlackJackTest < Minitest::Test
   def test_new_deck
@@ -28,7 +28,7 @@ class BlackJackTest < Minitest::Test
 
   def test_starting_hand
     game = BlackJack.new
-    game.play
+    game.deal_hands
     assert_equal true, (game.dealer.hand.count == 2) && (game.player.hand.count == 2)
   end
 

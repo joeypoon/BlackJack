@@ -16,10 +16,23 @@ class Player
     if total.nil?
       0
     elsif total > 21
-      @bust = true
-      total
+      if soft_hand
+        @hand.map { |card| card.value }.reduce(:+)
+      else
+        @bust = true
+        total
+      end
     else
       total
+    end
+  end
+
+  def soft_hand
+    @hand.each do |card|
+      if card.value == 11
+        card.soft_ace
+        return true
+      end
     end
   end
 end

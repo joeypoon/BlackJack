@@ -1,4 +1,4 @@
-require '~/dropbox/workspace/iron_yard/week-2-lab/card'
+require_relative 'card'
 
 class Deck
   attr_reader :cards

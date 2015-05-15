@@ -1,4 +1,4 @@
-require '~/dropbox/workspace/iron_yard/week-2-lab/player'
+require_relative 'player'
 
 class Dealer < Player
 

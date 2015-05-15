@@ -1,5 +1,5 @@
 require 'minitest/autorun'
-require '~/dropbox/workspace/iron_yard/week-2-lab/deck'
+require_relative '../deck'
 
 class DeckTest < Minitest::Test
   def setup

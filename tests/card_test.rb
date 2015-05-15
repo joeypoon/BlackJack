@@ -1,5 +1,5 @@
 require 'minitest/autorun'
-require '~/dropbox/workspace/iron_yard/week-2-lab/card'
+require_relative '../card'
 
 class CardTest < Minitest::Test
   def test_value

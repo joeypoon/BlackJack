@@ -1,6 +1,6 @@
 require 'minitest/autorun'
-require '~/dropbox/workspace/iron_yard/week-2-lab/dealer'
-require '~/dropbox/workspace/iron_yard/week-2-lab/card'
+require_relative '../dealer'
+require_relative '../card'
 
 class DealerTest < Minitest::Test
   def test_first_card

@@ -1,0 +1,5 @@
+require_relative 'card_test'
+require_relative 'deck_test'
+require_relative 'player_test'
+require_relative 'dealer_test'
+# require_relative 'blackjack_test'
