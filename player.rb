@@ -1,6 +1,6 @@
 class Player
   attr_accessor :hand
-  attr_reader :bust, :name
+  attr_reader :bust, :name, :score
 
   def initialize
     @hand = []

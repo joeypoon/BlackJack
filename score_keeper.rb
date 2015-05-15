@@ -1,32 +1,35 @@
-require 'csv'
-
 class ScoreKeeper
-  attr_reader :scores
+  attr_reader :dealer_score, :player_score
 
   def initialize
-    @scores = {
-      Dealer: 0
-      Player: 0
-    }
+    read_scores
+  end
+
+  def player_win
+    @player_score += 1
+  end
+
+  def dealer_win
+    @dealer_score += 1
   end
 
   def read_scores
-    unless File.zero?('scores.csv')
-      CSV.read('scores.csv', headers: true) do |line|
-        @scores[:Dealer] = line.to_hash["Dealer"].to_i
-        @scores[:Player] = line.to_hash[" Player"].to_i
-      end
-    end
+    file = File.read('scores.csv')
+    scores = file.split(',')
+    @dealer_score = scores[0].to_i
+    @player_score = scores[1].to_i
   end
 
   def write_scores
-    File.write('score.csv', text.gsub) do |line|
-      line.to_hash['Dealer'] = @dealer_wins
-      line.to_hash[' Player'] = @player_wins
+    File.open('scores.csv', 'w') do |line|
+      line << "#{@dealer_score},#{@player_score}"
     end
   end
 
   def reset_scores
+    File.open('scores.csv', 'w') do |line|
+      line << "0,0"
+    end
   end
 
 end

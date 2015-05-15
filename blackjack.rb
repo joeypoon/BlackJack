@@ -1,16 +1,16 @@
 require 'csv'
 require_relative 'shoe'
 require_relative 'dealer'
-# require_relative 'score_keeper'
+require_relative 'score_keeper'
 
 class BlackJack < Deck
-  attr_reader :deck, :dealer, :player, :players, :dealer_wins, :player_wins
+  attr_reader :deck, :dealer, :player, :players, :score_keeper
 
   def initialize
     setup
-    @player_wins = 0
-    @dealer_wins = 0
-    # read_score
+    @score_keeper = ScoreKeeper.new
+    # @player_wins = 0
+    # @dealer_wins = 0
   end
 
   def play
@@ -60,10 +60,10 @@ class BlackJack < Deck
 
     def intro
       puts
-      puts "*******************"
-      puts "*****BlackJack*****"
-      puts "*******************"
-      puts "Play a game?  (y/n)"
+      puts "***********************"
+      puts "*******BlackJack*******"
+      puts "***********************"
+      puts "   Play a game? (y/n)"
       puts
       get_play
     end
@@ -76,12 +76,12 @@ class BlackJack < Deck
 
     def menu
       puts
-      puts "*******************"
+      puts "***********************"
       puts @player.display_hand
       puts @dealer.display_first_card
-      puts "*******************"
-      puts "(H)it or (S)tay"
-      puts "*******************"
+      puts "***********************"
+      puts "    (H)it or (S)tay"
+      puts "***********************"
       puts
       get_action
     end
@@ -113,19 +113,19 @@ class BlackJack < Deck
     end
 
     def player_lose
-      @dealer_wins += 1
+      @score_keeper.dealer_win
       puts "***You have failed to achieve victory***"
       over
     end
 
     def dealer_lose
-      @player_wins += 1
+      @score_keeper.player_win
       puts "***Winner Winner***"
       over
     end
 
     def player_over_5
-      @player_wins += 1
+      @score_keeper.player_win
       puts "Victory! You have #{@player.hand.count} cards."
       over
     end
@@ -135,6 +135,7 @@ class BlackJack < Deck
       puts display_wins_count
       puts @player.display_hand
       puts @dealer.display_hand
+      @score_keeper.write_scores
       play
     end
 
@@ -143,6 +144,6 @@ class BlackJack < Deck
     end
 
     def display_wins_count
-      "Player: #{@player_wins} wins - Dealer: #{@dealer_wins} wins --- #{((@player_wins.to_f / (@player_wins + @dealer_wins)) * 100).to_i}%"
+      "Player: #{@score_keeper.player_score} wins - Dealer: #{@score_keeper.dealer_score} wins --- #{((@score_keeper.player_score.to_f / (@score_keeper.player_score + @score_keeper.dealer_score)) * 100).to_i}%"
     end
 end
