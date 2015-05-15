@@ -8,7 +8,7 @@ class Player
   end
 
   def show_hand
-    @hand.map { |card| card.to_s }.join(', ')
+    @hand.map { |card| card.to_s }.join(', ') + " Total: #{hand_value}"
   end
 
   def hand_value

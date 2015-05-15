@@ -1,24 +1,6 @@
 require '~/dropbox/workspace/iron_yard/week-2-lab/deck'
 require '~/dropbox/workspace/iron_yard/week-2-lab/dealer'
 
-# don't consider Aces as possible 1's ... they are always 11s
-# This is a 2 hand game (dealer and player)
-# no splitting or funny business
-# 1 deck in the game
-# 52 card deck
-# NO WILDS
-# New deck every game
-# deck must be shuffled every game
-# no betting at all
-# must have suits (ace of diamonds)
-# Dealer hits if less than 16, otherwise dealer stays
-# You enter what you play
-# No if you get 5 cards you win funnybusiness
-# get as close to 21 without going over
-# Must beat the dealer
-# you can see 1 of dealers cards, while you are playing
-# If you get blackjack, you win automagically
-
 class BlackJack < Deck
   attr_reader :deck, :dealer, :player, :players
 
@@ -37,22 +19,15 @@ class BlackJack < Deck
     menu
   end
 
-  def hit_player
-    @player.hand << @deck.draw
-    @player.hand_value
-  end
-
-  def hit_dealer
-    @dealer.hand << @deck.draw until @dealer.hand_value >= 17
-  end
-
   private
 
     def intro
+      puts
       puts "*******************"
       puts "*****BlackJack*****"
       puts "*******************"
       puts "Play a game?  (y/n)"
+      puts
       get_play
     end
 
@@ -62,24 +37,27 @@ class BlackJack < Deck
       exit if @play == 'n'
     end
 
-    def get_action
-      @action = gets.chomp.downcase
-      if @action == 'h'
-        hit_player
-      elsif @action == 's'
-      else
-        menu
-      end
-    end
-
     def menu
+      puts
       puts "*******************"
       puts "Your hand: #{@player.show_hand}"
       puts "Dealer top card: #{@dealer.first_card}"
       puts "*******************"
       puts "(H)it or (S)tay"
       puts "*******************"
+      puts
       get_action
+    end
+
+    def get_action
+      @action = gets.chomp.downcase
+      if @action == 'h'
+        hit_player
+      elsif @action == 's'
+        stay
+      else
+        menu
+      end
     end
 
     def deal_hands
@@ -91,12 +69,56 @@ class BlackJack < Deck
 
     def check_blackjack
       if @dealer.hand_value == 21
-        puts "Dealer BlackJack :sadface"
-        play
+        player_lose
       elsif @player.hand_value == 21
-        puts "BlackJack!!1one!1!two"
+        dealer_lose
+      end
+    end
+
+    def hit_player
+      @player.hand << @deck.draw
+      @player.hand_value
+      if @player.bust
+        player_lose
+      else
+        menu
+      end
+    end
+
+    def hit_dealer
+      @dealer.hand << @deck.draw until @dealer.hand_value >= 17
+      dealer_lose if @dealer.bust
+    end
+
+    def stay
+      hit_dealer
+      compare_hands
+    end
+
+    def compare_hands
+      if @player.hand_value > @dealer.hand_value
+        dealer_lose
+        play
+      else
+        player_lose
         play
       end
+    end
+
+    def player_lose
+      puts score_line
+      puts "***You have failed to achieve victory***"
+      play
+    end
+
+    def dealer_lose
+      puts score_line
+      puts "***Winner Winner***"
+      play
+    end
+
+    def score_line
+      "Player: #{@player.hand_value} - Dealer: #{@dealer.hand_value}"
     end
 end
 
