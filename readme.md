@@ -10,5 +10,3 @@
 * Shoe reshuffled once under 52 cards
 * Scores tracked through scores.csv
 * Can see win percentage
-
-* Written in Ruby
