@@ -1,21 +1,16 @@
-#!/usr/bin/env ruby
-
 require 'csv'
-require_relative 'deck'
+require_relative 'shoe'
 require_relative 'dealer'
+# require_relative 'score_keeper'
 
 class BlackJack < Deck
   attr_reader :deck, :dealer, :player, :players, :dealer_wins, :player_wins
 
   def initialize
-    @dealer = Dealer.new
-    @player = Player.new
-    @deck = Deck.new
+    setup
     @player_wins = 0
     @dealer_wins = 0
     # read_score
-    @players = [@dealer, @player]
-    @deck.shuffle_deck
   end
 
   def play
@@ -34,7 +29,7 @@ class BlackJack < Deck
     players.each do |player|
       player.hand << @deck.cards.shift until player.hand.count == 2
     end
-    check_blackjack
+    player_lose if @dealer.hand_value == 21
   end
 
   def hit_player
@@ -52,9 +47,13 @@ class BlackJack < Deck
   private
 
     def play_again
+      setup
+    end
+
+    def setup
       @dealer = Dealer.new
       @player = Player.new
-      @deck = Deck.new
+      @deck = Shoe.new
       @players = [@dealer, @player]
       @deck.shuffle_deck
     end
@@ -78,8 +77,8 @@ class BlackJack < Deck
     def menu
       puts
       puts "*******************"
-      puts "Your hand: #{@player.show_hand}"
-      puts "Dealer top card: #{@dealer.first_card}"
+      puts @player.display_hand
+      puts @dealer.display_first_card
       puts "*******************"
       puts "(H)it or (S)tay"
       puts "*******************"
@@ -95,14 +94,6 @@ class BlackJack < Deck
         stay
       else
         menu
-      end
-    end
-
-    def check_blackjack
-      if @dealer.hand_value == 21
-        player_lose
-      elsif @player.hand_value == 21
-        dealer_lose
       end
     end
 
@@ -123,56 +114,35 @@ class BlackJack < Deck
 
     def player_lose
       @dealer_wins += 1
-      puts score_line
       puts "***You have failed to achieve victory***"
-      puts display_wins_count
-      play
+      over
     end
 
     def dealer_lose
       @player_wins += 1
-      puts score_line
       puts "***Winner Winner***"
-      puts display_wins_count
-      play
+      over
     end
 
     def player_over_5
       @player_wins += 1
-      puts score_line
       puts "Victory! You have #{@player.hand.count} cards."
+      over
+    end
+
+    def over
+      puts score_line
       puts display_wins_count
+      puts @player.display_hand
+      puts @dealer.display_hand
       play
     end
 
     def score_line
-      # write_score
       "Player: #{@player.hand_value} - Dealer: #{@dealer.hand_value}"
     end
 
     def display_wins_count
       "Player: #{@player_wins} wins - Dealer: #{@dealer_wins} wins --- #{((@player_wins.to_f / (@player_wins + @dealer_wins)) * 100).to_i}%"
     end
-
-    # def read_score
-    #   CSV.foreach('./score.csv', headers: true) do |line|
-    #     @dealer_wins = line.to_hash["Dealer"].to_i
-    #     @player_wins = line.to_hash[" Player"].to_i
-    #   end
-    # end
-    #
-    # def write_score
-    #   CSV.open('./score.csv', 'w') do |line|
-    #     line.to_hash['Dealer'] = @dealer_wins
-    #     line.to_hash[' Player'] = @player_wins
-    #   end
-    # end
-    # 
-    # def reset_score
-    # end
-end
-
-if File.identical?("./blackjack.rb", $0)
-  game = BlackJack.new
-  game.play
 end

@@ -1,38 +1,52 @@
 class Player
   attr_accessor :hand
-  attr_reader :bust
+  attr_reader :bust, :name
 
   def initialize
     @hand = []
     @bust = false
+    @name = "Player"
   end
 
-  def show_hand
-    @hand.map { |card| card.to_s }.join(', ') + " Total: #{hand_value}"
+  def display_hand
+    "#{@name} hand: #{show_hand}"
   end
 
   def hand_value
-    total = @hand.map { |card| card.value }.reduce(:+)
-    if total.nil?
-      0
-    elsif total > 21
+    if calculate_hand_value > 21
       if soft_hand
-        @hand.map { |card| card.value }.reduce(:+)
+        calculate_hand_value
       else
         @bust = true
-        total
+        calculate_hand_value
       end
     else
-      total
+      calculate_hand_value
     end
   end
 
-  def soft_hand
-    @hand.each do |card|
-      if card.value == 11
-        card.soft_ace
-        return true
-      end
+  def calculate_hand_value
+    if @hand.empty?
+      0
+    else
+      @hand.map { |card| card.value }.reduce(:+)
     end
   end
+
+  private
+
+    def show_hand
+      @hand.map { |card| card.to_s }.join(', ') + " Total: #{hand_value}"
+    end
+
+    def soft_hand
+      ace = false
+      @hand.each do |card|
+        if card.value == 11
+          card.soft_ace
+          return true
+        end
+      end
+      ace
+    end
 end

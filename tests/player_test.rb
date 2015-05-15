@@ -28,4 +28,13 @@ class PlayerTest < Minitest::Test
     player.hand << Card.new('Ace', 'Spade')
     assert_equal 14, player.hand_value
   end
+
+  def test_bust
+    player = Player.new
+    player.hand << Card.new('Jack', 'Spade')
+    player.hand << Card.new('King', 'Diamond')
+    player.hand << Card.new('Queen', 'Spade')
+    player.hand_value
+    assert_equal true, player.bust
+  end
 end
