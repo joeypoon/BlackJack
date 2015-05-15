@@ -7,6 +7,7 @@ class BlackJack < Deck
   attr_reader :deck, :dealer, :player, :players, :score_keeper
 
   def initialize
+    @deck = Shoe.new
     setup
     @score_keeper = ScoreKeeper.new
     # @player_wins = 0
@@ -53,7 +54,7 @@ class BlackJack < Deck
     def setup
       @dealer = Dealer.new
       @player = Player.new
-      @deck = Shoe.new
+      @deck = Shoe.new if @deck.cards.count < 52
       @players = [@dealer, @player]
       @deck.shuffle_deck
     end
@@ -144,6 +145,10 @@ class BlackJack < Deck
     end
 
     def display_wins_count
-      "Player: #{@score_keeper.player_score} wins - Dealer: #{@score_keeper.dealer_score} wins --- #{((@score_keeper.player_score.to_f / (@score_keeper.player_score + @score_keeper.dealer_score)) * 100).to_i}%"
+      "Player: #{@score_keeper.player_score} wins - Dealer: #{@score_keeper.dealer_score} wins --- #{win_percentage}%"
+    end
+
+    def win_percentage
+      ((@score_keeper.player_score.to_f / (@score_keeper.player_score + @score_keeper.dealer_score)) * 100).to_i
     end
 end
