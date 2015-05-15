@@ -31,10 +31,10 @@ class BlackJack < Deck
   end
 
   def play
-    # intro
+    intro
     initialize
     deal_hands
-    # if @player.bust || @dealer.bust
+    menu
   end
 
   def hit_player
@@ -48,25 +48,38 @@ class BlackJack < Deck
 
   private
 
-    # def intro
-    #   puts "*******************"
-    #   puts "*****BlackJack*****"
-    #   puts "*******************"
-    #   puts "Play a game?  (y/n)"
-    #   get_action
-    #   get_action while @action != 'y' || @action != 'n'
-    #   exit if @action == 'n'
-    # end
-    #
-    # def get_action
-    #   @action = gets.chomp.downcase
-    # end
+    def intro
+      puts "*******************"
+      puts "*****BlackJack*****"
+      puts "*******************"
+      puts "Play a game?  (y/n)"
+      get_play
+    end
+
+    def get_play
+      @play = gets.chomp.downcase
+      intro unless ((@play == 'y') || (@play == 'n'))
+      exit if @play == 'n'
+    end
+
+    def get_action
+      @action = gets.chomp.downcase
+      if @action == 'h'
+        hit_player
+      elsif @action == 's'
+      else
+        menu
+      end
+    end
 
     def menu
       puts "*******************"
       puts "Your hand: #{@player.show_hand}"
       puts "Dealer top card: #{@dealer.first_card}"
       puts "*******************"
+      puts "(H)it or (S)tay"
+      puts "*******************"
+      get_action
     end
 
     def deal_hands
@@ -86,6 +99,6 @@ class BlackJack < Deck
       end
     end
 end
-#
-# game = BlackJack.new
-# game.play
+
+game = BlackJack.new
+game.play

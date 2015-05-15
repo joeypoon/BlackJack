@@ -9,7 +9,7 @@ class CardTest < Minitest::Test
 
   def test_card
     card = Card.new('Jack', 'Spade')
-    assert_equal "Jack of Spades", card.show_card
+    assert_equal "Jack of Spades", card.to_s
   end
 
   def test_soft_ace
