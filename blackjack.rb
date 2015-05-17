@@ -71,8 +71,14 @@ class BlackJack < Deck
 
     def get_play
       @play = gets.chomp.downcase
-      intro unless ((@play == 'y') || (@play == 'n'))
-      exit if @play == 'n'
+      if @play == 'reset'
+        @score_keeper.reset_scores
+        exit
+      elsif @play == 'n'
+        exit
+      elsif @play != 'y' && @play != 'n'
+        intro
+      end
     end
 
     def menu
